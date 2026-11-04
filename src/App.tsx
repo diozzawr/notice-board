@@ -1,45 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-// Описываем структуру данных, которую возвращает JSONPlaceholder
 interface Notice {
   id: number;
   title: string;
-  body: string; // В этом API поле с текстом называется "body"
+  description: string;
+  price: number;
 }
 
 function App() {
-  const [notices, setNotices] = useState<Notice[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    // Публичный тестовый API
-    fetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
-      .then((res) => res.json())
-      .then((data) => {
-        setNotices(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Ошибка при загрузке данных:', err);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <div style={{ padding: '20px' }}>Загрузка объявлений...</div>;
-  }
+  const [notices] = useState<Notice[]>([
+    { id: 1, title: 'Продам велосипед', description: 'Отличное состояние', price: 5000 },
+    { id: 2, title: 'Ремонт ноутбуков', description: 'Быстро и качественно', price: 1000 },
+  ]);
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1>Доска объявлений</h1>
-      <ul>
-        {notices.map((notice) => (
-          <li key={notice.id} style={{ marginBottom: '15px' }}>
-            <h3>{notice.title}</h3>
-            <p>{notice.body}</p>
-          </li>
+    <div style={{ padding: '30px', fontFamily: 'sans-serif', maxWidth: '600px', margin: '0 auto' }}>
+      <h1>📢 Доска объявлений</h1>
+      <p style={{ color: 'green' }}>✅ Сайт успешно задеплоен через GitHub Actions!</p>
+      
+      <div style={{ marginTop: '20px' }}>
+        {notices.map((n) => (
+          <div key={n.id} style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '8px', marginBottom: '10px' }}>
+            <h3>{n.title}</h3>
+            <p>{n.description}</p>
+            <strong>{n.price} сом</strong>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
